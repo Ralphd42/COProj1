@@ -1,0 +1,16 @@
+/home/ralph/development/dotnet/ProjectOne/bin/Debug/net5.0/ProjectOne
+/home/ralph/development/dotnet/ProjectOne/bin/Debug/net5.0/ProjectOne.deps.json
+/home/ralph/development/dotnet/ProjectOne/bin/Debug/net5.0/ProjectOne.runtimeconfig.json
+/home/ralph/development/dotnet/ProjectOne/bin/Debug/net5.0/ProjectOne.runtimeconfig.dev.json
+/home/ralph/development/dotnet/ProjectOne/bin/Debug/net5.0/ProjectOne.dll
+/home/ralph/development/dotnet/ProjectOne/bin/Debug/net5.0/ref/ProjectOne.dll
+/home/ralph/development/dotnet/ProjectOne/bin/Debug/net5.0/ProjectOne.pdb
+/home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ProjectOne.csprojAssemblyReference.cache
+/home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ProjectOne.GeneratedMSBuildEditorConfig.editorconfig
+/home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ProjectOne.AssemblyInfoInputs.cache
+/home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ProjectOne.AssemblyInfo.cs
+/home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ProjectOne.csproj.CoreCompileInputs.cache
+/home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ProjectOne.dll
+/home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ref/ProjectOne.dll
+/home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ProjectOne.pdb
+/home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ProjectOne.genruntimeconfig.cache

@@ -1,0 +1,35 @@
+File processor object
+    need to be able to iterate a program list.  
+    handle jump and end statements
+    handle jumps and branchs
+    counter
+    get next statement
+    loader
+    functs
+        1) load application
+        2) get next
+    fields counter
+        current place
+        label location
+            keep track of labels
+        get next line
+        next command
+
+
+
+
+Stack
+    Add and remove items
+    create object with Stack commands
+
+Memory
+    create as array with set size
+    Memory
+    thread safe sigleton
+
+processor
+    Command list
+
+commands 
+dotnet run
+dotnet build
