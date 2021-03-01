@@ -9,6 +9,41 @@ namespace ProjectOne
 {
     class Smemory
     {
+        private Dictionary<string,int> _memory;
+        private int _memLength;
+        public Smemory(int length)
+        {
+            _memLength =0;
+
+
+        }
+        public int? getValue( string addr)
+        {
+            int ? rv =null;
+            if(_memory!=null)
+            {
+                if(_memory.ContainsKey(addr))
+                {
+                    return _memory[addr];
+
+                }
+            }
+            return rv;
+        }
+        public bool addValue(string l, int r)
+        {
+            bool retval = true;
+            if( _memory ==null)
+            {
+                _memory = new Dictionary<string, int>();
+            }
+            _memory[l] =r;
+            return retval;
+        }
+        public bool raddValue(int r,string l)
+        {
+            return addValue(l,r);
+        }
 
     }
 }
