@@ -11,12 +11,28 @@ namespace ProjectOne
     {
         private Dictionary<string,int> _memory;
         private int _memLength;
-        public Smemory(int length)
+        private Smemory(int length)
         {
             _memLength =0;
 
 
         }
+        public static Smemory MEM
+        {
+            get
+            {
+                if(_mem==null)
+                {
+                    _mem = new Smemory(1000);
+
+                }
+                return _mem;
+            }
+        }
+        private static Smemory _mem;
+
+
+
         public int? getValue( string addr)
         {
             int ? rv =null;

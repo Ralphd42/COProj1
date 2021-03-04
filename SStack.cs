@@ -14,9 +14,15 @@ namespace ProjectOne
         /// <summary>
         /// This is the stack  
         /// </summary>
-        public SStack(Smemory mem, string StackID)
+        public SStack(Smemory mem=null, string StackID="")
         {
+            if( mem==null)
+            {
+                _Mem = Smemory.MEM;
+            }else
+            { 
             _Mem =mem;
+            }
         }
         private Stack<object> _Stack  ;
         private Smemory _Mem;
@@ -65,6 +71,22 @@ Pushes a copy of the top value on stack
             //_Mem.addValue( "tmp" ,(int)_Stack.Pop());    
             //_Mem.addValue((string)_Stack.Pop(),(int)_Mem.getValue("tmp"));
             _Mem.raddValue((int) _Stack.Pop(), (string)_Stack.Pop());
+
+
+        }
+
+        public void gofalse( string label)
+        {
+            ProgFileMan.PFM.Go(label, (int)_Stack.Pop(),true);
+        }
+        public void goTrue( string label)
+        {
+            ProgFileMan.PFM.Go(label, (int)_Stack.Pop(),true);
+        }
+
+        public void add()
+        {
+            _Stack.Push((int)_Stack.Pop() + (int)_Stack.Pop());
 
 
         }

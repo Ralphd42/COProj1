@@ -15,9 +15,19 @@ namespace ProjectOne
         private Dictionary<String, int> Labels;
         //the program is held in this list
         private List<string> program;
+        public static ProgFileMan  PFM{get{
+            if( _prog ==null)
+            {
+                _prog = new ProgFileMan("");
 
-        public ProgFileMan(string FileName) => _FileName = FileName;
+            }
+            return _prog;
 
+        }}
+        private static ProgFileMan _prog; 
+
+        public  ProgFileMan(string FileName) => _FileName = FileName;
+                
          
         public bool LoadProg()
         {
@@ -78,6 +88,15 @@ namespace ProjectOne
             return NextCommand;
         }
 
+        public string Go( string label ,int checkVal ,bool isZero =true)
+        {
+            if( (isZero && checkVal ==0) || !isZero && checkVal!=0 )
+            {
+                return Jump(label);
+            }
+            return NextCommand;
+        }
+         
 
 
 
