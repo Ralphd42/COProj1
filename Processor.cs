@@ -20,10 +20,14 @@ namespace ProjectOne
         /// <returns>true if no errors</returns>
         public bool Process(  string FileName)
         {
+            Smemory CurMem = Smemory.MEM;
+            bool inBegin =false;
+            bool inCall =false;
             bool retval =false; 
-            _stack = new SStack();   
+               
             //  load the program
             pg = new ProgFileMan(FileName);
+            _stack = new SStack(pg);
             pg.LoadProg();
             // next we run the program by getting the instructions until complete
             var nxtStr =pg.NextCommand;
@@ -40,7 +44,7 @@ namespace ProjectOne
                 }else
                 if( curcmd.amcommand.CompareTo("rvalue")==0)
                 {
-                    _stack.rvalue(curcmd.svalue);//  .push(curcmd.pushVal);
+                    _stack.rvalue(curcmd.svalue,inCall);//  .push(curcmd.pushVal);
                 }else
                 if( curcmd.amcommand.CompareTo("lvalue")==0)
                 {
@@ -51,7 +55,7 @@ namespace ProjectOne
                     _stack.pop();//  .push(curcmd.pushVal);
                 }else if( curcmd.amcommand.CompareTo(":=")==0)
                 {
-                    _stack.SetMemFromStack();//  .push(curcmd.pushVal);
+                    _stack.SetMemFromStack( inBegin);//  .push(curcmd.pushVal);
                 }else if( curcmd.amcommand.CompareTo("copy")==0)
                 {
                     // not implemented
@@ -91,9 +95,57 @@ namespace ProjectOne
                 else if ( curcmd.amcommand.CompareTo("call")==0)
                 {
                     pg.call(curcmd.pushVal.ToString());
+                    CurMem.State =2;
+                    inCall =true;
                 }else if ( curcmd.amcommand.CompareTo("return")==0)
                 {
+                    CurMem.State =3;
                     pg.returnFromCall();
+                    inCall =false;
+                    CurMem.State =3;
+                 
+                }else if ( curcmd.amcommand.CompareTo(">")==0)
+                {
+                    _stack.gr();
+                //gr
+                }else if ( curcmd.amcommand.CompareTo("<")==0)
+                {
+                    _stack.less();
+                //gr
+                }
+                else if ( curcmd.amcommand.CompareTo("<>")==0)
+                {
+                    _stack.notEQ();
+                //gr lessEQ  grEQ
+                }else if (curcmd.amcommand.CompareTo("<=")==0)
+                {
+                    _stack.lessEQ();
+                }else if (curcmd.amcommand.CompareTo(">=")==0)
+                {
+                    _stack.grEQ();
+                }
+                else if (curcmd.amcommand.CompareTo("begin")==0)
+                {
+                    inBegin =true;
+                    CurMem = CurMem.addChild(CurMem);
+                    _stack.curMem =CurMem;
+                }else if (curcmd.amcommand.CompareTo("end")==0)
+                {
+                    inBegin =false;
+                    CurMem = CurMem.ParentMem;
+                    _stack.curMem = CurMem;
+                }
+                else if (curcmd.amcommand.CompareTo("&")==0)
+                {
+                    _stack.OpAnd();
+                }
+                else if (curcmd.amcommand.CompareTo("|")==0)
+                {
+                    _stack.OpOr();
+                }
+                else if (curcmd.amcommand.CompareTo("!")==0)
+                {
+                    _stack.OpNot();
                 }
                 nxtStr =pg.NextCommand;
                 curcmd =parser.parse(nxtStr);

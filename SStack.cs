@@ -11,10 +11,20 @@ namespace ProjectOne
     /// </summary>
      class SStack
     {
+        private ProgFileMan PFM;
+        public Smemory curMem 
+        {
+            get{ 
+                return _Mem;  
+            }
+            set{ 
+                _Mem =value;   
+            }
+        }
         /// <summary>
         /// This is the stack  
         /// </summary>
-        public SStack(Smemory mem=null, string StackID="")
+        public SStack( ProgFileMan pf,Smemory mem=null, string StackID="")
         {
             if( mem==null)
             {
@@ -24,6 +34,7 @@ namespace ProjectOne
                 _Mem =mem;
             }
             _Stack = new Stack<object>();
+            PFM = pf;
 
         }
         private Stack<object> _Stack  ;
@@ -45,9 +56,23 @@ namespace ProjectOne
         }
         //rvalue l Pushes contents of data location l onto the stack
 
-        public void rvalue (string l)
+        public void rvalue (string l, bool isLocal=false)
         {
-            _Stack.Push( _Mem.getValue(l));
+         /*   Smemory mem;
+            if( isLocal){
+                mem = Smemory.LMEM;
+            }
+            else
+            { 
+                mem = Smemory.MEM;
+            }*/
+            if (_Mem.State ==1){  // state 1 is begin
+                _Stack.Push( _Mem.ParentMem.getValue(l));
+            }else{
+                _Stack.Push( _Mem.getValue(l));
+            }
+
+            
         }
 
         /*lvalue l
@@ -67,23 +92,35 @@ Pushes a copy of the top value on stack
         
         
         */
-        public void SetMemFromStack()
+        public void SetMemFromStack(bool local =false)
         {
             // pop the value
             //_Mem.addValue( "tmp" ,(int)_Stack.Pop());    
             //_Mem.addValue((string)_Stack.Pop(),(int)_Mem.getValue("tmp"));
-            _Mem.raddValue((int) _Stack.Pop(), (string)_Stack.Pop());
-             Smemory.dumpMemory();
+          /*  if(local)
+            { 
+                Smemory.LMEM.raddValue((int) _Stack.Pop(), (string)_Stack.Pop());
+            }else
+            {
+                Smemory.MEM.raddValue((int) _Stack.Pop(), (string)_Stack.Pop());
+            }*/
+            if(_Mem.State==3){ 
+                _Mem.ParentMem.raddValue((int) _Stack.Pop(), (string)_Stack.Pop());
+            }else
+            {
+                _Mem.raddValue((int) _Stack.Pop(), (string)_Stack.Pop());
+            }
 
+            Smemory.dumpMemory();
         }
 
         public void gofalse( string label)
         {
-            ProgFileMan.PFM.Go(label, (int)_Stack.Pop(),true);
+            PFM.Go(label, (int)_Stack.Pop(),true);
         }
         public void goTrue( string label)
         {
-            ProgFileMan.PFM.Go(label, (int)_Stack.Pop(),true);
+            PFM.Go(label, (int)_Stack.Pop(),true);
         }
 
         public void add()
@@ -95,7 +132,7 @@ Pushes a copy of the top value on stack
 
         public void subtract()
         {
-            _Stack.Push((int)_Stack.Pop() - (int)_Stack.Pop());
+            _Stack.Push( -(int)_Stack.Pop() + (int)_Stack.Pop()   );
 
 
         }
@@ -106,69 +143,137 @@ Pushes a copy of the top value on stack
         }
         public void divide()
         {
-            _Stack.Push((int)((int)_Stack.Pop() / (int)_Stack.Pop()));
-
+            int one =(int)_Stack.Pop();
+            int two =(int)_Stack.Pop();
+            _Stack.Push((int)( two / one ) );
         }
 
         public void modulus()
         {
-            _Stack.Push((int)((int)_Stack.Pop() % (int)_Stack.Pop()));
+            int one =(int)_Stack.Pop();
+            int two =(int)_Stack.Pop();
+            _Stack.Push((int)( two % one ) );
 
         }
+        public void OpAnd()
+        {
+            int one =(int)_Stack.Pop();
+            int two =(int)_Stack.Pop();
+            if( one !=0 && two!=0)
+            {
+                _Stack.Push(1);
+                return;
+            }
+            _Stack.Push(0);
+        }
+
+        public void OpOr()
+        {
+            int one =(int)_Stack.Pop();
+            int two =(int)_Stack.Pop();
+            if( one !=0 || two!=0)
+            {
+                _Stack.Push(1);
+                return;
+            }
+            _Stack.Push(0);
+        }
+        public void OpNot()
+        {
+            int one =(int)_Stack.Pop();
+            if(one!=0)
+            {
+                _Stack.Push(0);
+                return;
+            }
+            _Stack.Push(1);
+        }
+
 
         /*Relational operators*/
-        public int notEQ()
+        public void notEQ()
         {
-            if( Popi()!=Popi())
+            if( Popi()!= Popi())
             {
-                return 1;
+                _Stack.Push(1);
+                
+            }else
+            { 
+                _Stack.Push(0);
             }
-            return 0;
         }
-        public int lessEQ()
+        public void lessEQ()
         {
-            if( Popi()<= Popi())
+            if( Popi()> Popi())
             {
-                return 1;
-            }
-            return 0;
-        }
+                _Stack.Push(1);
+            }else{ 
+            _Stack.Push(0);
+        }}
 
-        public int less()
+        public void grEQ()
         {
+            {
             if( Popi()< Popi())
             {
-                return 1;
+                _Stack.Push(1);
+            }else{ 
+            _Stack.Push(0);
+        }}
+
+
+        }
+
+
+        public void less()
+        {
+            if( Popi()> Popi())
+            {
+                _Stack.Push(1);
+            }else
+            {
+                _Stack.Push(0);
             }
-            return 0;
         }
 
         public int grEq()
         {
+            int retval =0;
             if( Popi()>= Popi())
             {
-                return 1;
+                retval = 1;
             }
-            return 0;
+            _Stack.Push(retval);
+            return retval;
         }
 
         public int gr()
         {
-            if( Popi()> Popi())
+            int retval =0;
+            if( !(Popi()>= Popi()))
             {
-                return 1;
+                retval = 1;
             }
-            return 0;
+            _Stack.Push(retval);
+            return retval;
         }
-        public int EQ()
+        public void notEq()
+        {
+            if( Popi()!= Popi())
+            {
+                _Stack.Push(1);
+            }
+            _Stack.Push(0);
+        }
+        public void EQ()
         {
             if( Popi()== Popi())
             {
-                return 1;
+                _Stack.Push(1);
             }
-            return 0;
+            _Stack.Push(0);
         }
-        public void print()
+        public void print(bool isSubProg=false)
         {
             Console.WriteLine("{0}", _Stack.Peek());
 

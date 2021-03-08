@@ -17,6 +17,27 @@ namespace ProjectOne
 
 
         }
+
+        public bool isMainMem()
+        {
+            bool retval = false;
+            if (parMem==null)
+                {
+                    retval =true;
+                }
+            return retval;
+        }
+
+        private Smemory parMem;
+        public  Smemory ParentMem {get{return parMem;}}
+        private int state;  // 0 = begin, 1 = called 2 returned 
+        public int State{get{return state;} set{state =value;} }
+        public Smemory addChild(Smemory par){
+            Smemory smem = new Smemory(1000);
+            smem.parMem =par;
+            smem.state =1;
+            return smem;
+        }
         public static Smemory MEM
         {
             get
@@ -30,6 +51,24 @@ namespace ProjectOne
             }
         }
         private static Smemory _mem;
+        private static Smemory _lmem;
+        public static Smemory LMEM
+        {
+            get
+            {
+                if(_lmem==null)
+                {
+                    _lmem = new Smemory(1000);
+
+                }
+                return _lmem;
+            }
+        }
+
+        //
+        private int loc =0;
+
+
         public static void dumpMemory()
         {
             if(parser.DEBUGGING)
@@ -47,7 +86,7 @@ namespace ProjectOne
 
         public int? getValue( string addr)
         {
-            int ? rv =null;
+            int ? rv =0;
             if(_memory!=null)
             {
                 if(_memory.ContainsKey(addr))

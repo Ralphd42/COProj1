@@ -15,7 +15,7 @@ namespace ProjectOne
         private Dictionary<String, int> Labels;
         //the program is held in this list
         private List<string> program;
-        public static ProgFileMan  PFM{get{
+        public static ProgFileMan  PFM_NotUsed{get{
             if( _prog ==null)
             {
                 _prog = new ProgFileMan("");
@@ -97,7 +97,7 @@ namespace ProjectOne
             {
                 return Jump(label);
             }
-            return NextCommand;
+            return "";//NextCommand;
         }
 
         public string call( string label)
@@ -107,8 +107,8 @@ namespace ProjectOne
         }
         public string returnFromCall()
         {
-            progCounter = retStack.Pop();
-            return NextCommand;
+            progCounter = retStack.Pop()+1;
+            return "";//NextCommand"";
         }
 
 
