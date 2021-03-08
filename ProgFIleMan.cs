@@ -7,7 +7,7 @@ namespace ProjectOne
 /// </summary>
     class ProgFileMan
     {
-        
+        Stack<int> retStack;
         private string _FileName;
         // program counter this is the next line
         private int progCounter = 0;
@@ -31,6 +31,7 @@ namespace ProjectOne
          
         public bool LoadProg()
         {
+            retStack = new Stack<int>();
             program = new List<string>();
             progCounter = 0;
             Labels = new Dictionary<string, int>();
@@ -43,9 +44,11 @@ namespace ProjectOne
                 {
                     program.Add(line);
                     string cmd = parser.parse(line).amcommand;
+                    //string label = cmd.
                     if (cmd.CompareTo("label") == 0)
                     {
-                        Labels[cmd] = cntr;
+                        string label = parser.parse(line).pushVal.ToString().Trim();
+                        Labels[label] = cntr;
 
                     }
                     cntr++;
@@ -96,7 +99,17 @@ namespace ProjectOne
             }
             return NextCommand;
         }
-         
+
+        public string call( string label)
+        {
+            retStack.Push(progCounter -1);
+            return Jump(  label);
+        }
+        public string returnFromCall()
+        {
+            progCounter = retStack.Pop();
+            return NextCommand;
+        }
 
 
 
@@ -104,5 +117,6 @@ namespace ProjectOne
         {
             Console.WriteLine("___________Hello___________");
         }
+
     }
 }

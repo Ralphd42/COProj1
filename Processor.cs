@@ -24,12 +24,15 @@ namespace ProjectOne
             _stack = new SStack();   
             //  load the program
             pg = new ProgFileMan(FileName);
+            pg.LoadProg();
             // next we run the program by getting the instructions until complete
             var nxtStr =pg.NextCommand;
             var curcmd =parser.parse(nxtStr);
             while (curcmd.amcommand.CompareTo("halt")!=0)  // end of halt
             {
-                Console.WriteLine("FullCmd -- " +nxtStr);
+                if(parser.DEBUGGING){ 
+                    Console.WriteLine("FullCmd -- " +nxtStr);
+                }
                 // process cmds
                 if( curcmd.amcommand.CompareTo("push")==0)
                 {
@@ -54,7 +57,7 @@ namespace ProjectOne
                     // not implemented
                 }else  if( curcmd.amcommand.CompareTo("goto")==0)
                 {
-                    pg.Jump(curcmd.svalue);//  .push(curcmd.pushVal);
+                    pg.Jump(curcmd.pushVal.ToString());//  .push(curcmd.pushVal);
                 }else  if( curcmd.amcommand.CompareTo("gofalse")==0)
                 {
                     _stack.gofalse(curcmd.svalue);
@@ -63,32 +66,39 @@ namespace ProjectOne
                     _stack.goTrue(curcmd.svalue);
                 }else   if( curcmd.amcommand.CompareTo("+")==0)
                 {
-                    _stack.goTrue(curcmd.svalue);
-                }else
-
-
-
-
-
-
+                    _stack.add();
+                }else   if( curcmd.amcommand.CompareTo("-")==0)
+                {
+                    _stack.subtract();
+                }else if( curcmd.amcommand.CompareTo("*")==0)
+                {
+                    _stack.multiply();
+                }else if( curcmd.amcommand.CompareTo("/")==0)
+                {
+                    _stack.divide();
+                }else if( curcmd.amcommand.CompareTo("div")==0)
+                {
+                    _stack.modulus();
+                }
+                else if ( curcmd.amcommand.CompareTo("show")==0)
+                {
+                    Console.WriteLine(curcmd.svalue);
+                }
+                else if ( curcmd.amcommand.CompareTo("print")==0)
+                {
+                    _stack.print();
+                }
+                else if ( curcmd.amcommand.CompareTo("call")==0)
+                {
+                    pg.call(curcmd.pushVal.ToString());
+                }else if ( curcmd.amcommand.CompareTo("return")==0)
+                {
+                    pg.returnFromCall();
+                }
                 nxtStr =pg.NextCommand;
                 curcmd =parser.parse(nxtStr);
             }
-
-
-
-
-
             return retval;
         }
-
-
-
-
-
-
-
-
     }
-    
 }

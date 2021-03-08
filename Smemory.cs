@@ -30,6 +30,18 @@ namespace ProjectOne
             }
         }
         private static Smemory _mem;
+        public static void dumpMemory()
+        {
+            if(parser.DEBUGGING)
+            { 
+                Console.WriteLine("Begin Memory Dump");
+                foreach(var item in MEM._memory)
+                {
+                    Console.WriteLine("{0} - {1}", item.Key, item.Value);
+                }
+                Console.WriteLine("End Memory Dump");
+            }
+        }
 
 
 
