@@ -14,3 +14,5 @@
 /home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ref/ProjectOne.dll
 /home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ProjectOne.pdb
 /home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ProjectOne.genruntimeconfig.cache
+/home/ralph/development/dotnet/ProjectOne/bin/Debug/net5.0/ProjectOne.xml
+/home/ralph/development/dotnet/ProjectOne/obj/Debug/net5.0/ProjectOne.xml

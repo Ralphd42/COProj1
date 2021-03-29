@@ -11,22 +11,40 @@ namespace ProjectOne
         /// the program to run
         /// </summary>
         private ProgFileMan pg;
+        /// <summary>
+        /// the stack fot this process
+        /// </summary>
         private SStack _stack;
+        /// <summary>
+        /// file to process
+        /// </summary>
+        private string _filename;    
+        public Processor(string FileName)
+        {
+            _filename =FileName;
+            _pMode = ProcMode.Project1_Legacy;  // start out as legacy until something changes this
+        }
+
+
+
+        /// <summary>
+        /// the current mode the processor is in
+        /// </summary>
+        private ProcMode _pMode;
         /// <summary>
         /// This is the main processor
         /// processing starts here
         /// </summary>
-        /// <param name="FileName">This is a file to be simulated</param>
-        /// <returns>true if no errors</returns>
-        public bool Process(  string FileName)
+        public void Process( )
         {
+
             Smemory CurMem = Smemory.MEM;
             bool inBegin =false;
             bool inCall =false;
-            bool retval =false; 
+            
                
             //  load the program
-            pg = new ProgFileMan(FileName);
+            pg = new ProgFileMan(_filename);
             _stack = new SStack(pg);
             pg.LoadProg();
             // next we run the program by getting the instructions until complete
@@ -34,7 +52,7 @@ namespace ProjectOne
             var curcmd =parser.parse(nxtStr);
             while (curcmd.amcommand.CompareTo("halt")!=0)  // end of halt
             {
-                if(parser.DEBUGGING){ 
+                if(Settings.DEBUGGING){ 
                     Console.WriteLine("FullCmd -- " +nxtStr);
                 }
                 // process cmds
@@ -56,7 +74,9 @@ namespace ProjectOne
                 }else if( curcmd.amcommand.CompareTo(":=")==0)
                 {
                     _stack.SetMemFromStack( inBegin);//  .push(curcmd.pushVal);
-                }else if( curcmd.amcommand.CompareTo("copy")==0)
+                }
+                
+                else if( curcmd.amcommand.CompareTo("copy")==0)
                 {
                     // not implemented
                 }else  if( curcmd.amcommand.CompareTo("goto")==0)
@@ -147,10 +167,48 @@ namespace ProjectOne
                 {
                     _stack.OpNot();
                 }
+                /*Project 2 modification*/
+                else if(curcmd.amcommand.CompareTo(".data") ==0    )
+                {
+                    _pMode = ProcMode.data;
+
+                }
+                else if(curcmd.amcommand.CompareTo(".text") ==0    )
+                {
+                    _pMode = ProcMode.text;
+
+                }
+                else if(curcmd.amcommand.CompareTo(".int") ==0    )
+                {   
+                    if( _pMode==ProcMode.data)
+                    {
+                        // add lvaue to data segment
+                    }
+
+                }
+                else if( curcmd.amcommand.CompareTo("&=")==0)
+                {
+                    _stack.SetMemFromStack( inBegin);//  .push(curcmd.pushVal);
+                }
+
                 nxtStr =pg.NextCommand;
                 curcmd =parser.parse(nxtStr);
             }
-            return retval;
+            return ;
         }
+    }
+
+    /// <summary>
+    /// Enum for processor modes.Processor can either be in data or instruction mode
+    /// op0
+    /// </summary>
+    public enum ProcMode
+    {
+        /// items stored in data segment
+        data,
+        ///Items stored in user text section
+        text,
+        ///This is to keep compatibility with project 1
+        Project1_Legacy
     }
 }

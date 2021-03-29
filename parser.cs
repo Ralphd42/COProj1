@@ -5,8 +5,8 @@ namespace ProjectOne
 
     class parser
     {
-        public const bool DEBUGGING=false;
-        public const bool dmpMem =false;
+        
+        
         public static amCommand parse( string line)
         {
             amCommand retval = new amCommand();

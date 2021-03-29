@@ -2,125 +2,157 @@ using System;
 using System.Collections.Generic;
 namespace ProjectOne
 {
-    
+
 
     /// <summary>
     /// this is the stack object.
     /// Handles the stack functions
     /// Maintains a stack
     /// </summary>
-     class SStack
+    class SStack
     {
-        private ProgFileMan PFM;
-        public Smemory curMem 
+        private ProgFileMan PFM;  // a reference to the programManager
+        public Smemory curMem   // a public accessors to the memory used by stack
         {
-            get{ 
-                return _Mem;  
+            get
+            {
+                return _Mem;
             }
-            set{ 
-                _Mem =value;   
+            set
+            {
+                _Mem = value;
             }
         }
         /// <summary>
         /// This is the stack  
         /// </summary>
-        public SStack( ProgFileMan pf,Smemory mem=null, string StackID="")
+        public SStack(ProgFileMan pf, Smemory mem = null, string StackID = "")
         {
-            if( mem==null)
+            if (mem == null)
             {
                 _Mem = Smemory.MEM;
-            }else
-            { 
-                _Mem =mem;
+            }
+            else
+            {
+                _Mem = mem;
             }
             _Stack = new Stack<object>();
             PFM = pf;
 
         }
-        private Stack<object> _Stack  ;
+        private Stack<object> _Stack;  // the instance of a stack
         private Smemory _Mem;
         /// <summary>
         /// Pushes c onto the stack
         /// </summary>
-        /// <param name="o"></param>
-        public void push (object c)
+        /// <param name="c"></param>
+        public void push(object c)
         {
             _Stack.Push(c);
         }
 
+        /// <summary>
+        ///  pops item off stack does not use item 
+        /// </summary>
         public void pop()
         {
-            _Stack.Pop();    
+            _Stack.Pop();
 
 
         }
         //rvalue l Pushes contents of data location l onto the stack
 
-        public void rvalue (string l, bool isLocal=false)
+        public void rvalue(string l, bool isLocal = false)
         {
-         /*   Smemory mem;
-            if( isLocal){
-                mem = Smemory.LMEM;
+            /*   Smemory mem;
+               if( isLocal){
+                   mem = Smemory.LMEM;
+               }
+               else
+               { 
+                   mem = Smemory.MEM;
+               }*/
+            if (_Mem.State == 1)
+            {  // state 1 is begin
+                _Stack.Push(_Mem.ParentMem.getValue(l));
             }
             else
-            { 
-                mem = Smemory.MEM;
-            }*/
-            if (_Mem.State ==1){  // state 1 is begin
-                _Stack.Push( _Mem.ParentMem.getValue(l));
-            }else{
-                _Stack.Push( _Mem.getValue(l));
+            {
+                _Stack.Push(_Mem.getValue(l));
             }
 
-            
+
         }
 
-        /*lvalue l
-Pushes address of data location l onto the stack
-*/
-        public void lvalue (string l)
+        /// <summary>
+        /// Pushes L Value onto Stack
+        /// </summary>
+        /// <param name="l"></param>
+        public void lvalue(string l)
         {
-            _Stack.Push( l);
+            _Stack.Push(l);
         }
 
-        /*
-            :=Stack top is placed by the lvalue below it and both are popped
-copy
-Pushes a copy of the top value on stack
 
-        
-        
-        
-        */
-        public void SetMemFromStack(bool local =false)
+        /// <summary>
+        /// sets memory from stack
+        /// </summary>
+        /// <param name="local"></param>
+        public void SetMemFromStack(bool local = false)
         {
-            // pop the value
-            //_Mem.addValue( "tmp" ,(int)_Stack.Pop());    
-            //_Mem.addValue((string)_Stack.Pop(),(int)_Mem.getValue("tmp"));
-          /*  if(local)
-            { 
-                Smemory.LMEM.raddValue((int) _Stack.Pop(), (string)_Stack.Pop());
-            }else
+            if (_Mem.State == 3)
             {
-                Smemory.MEM.raddValue((int) _Stack.Pop(), (string)_Stack.Pop());
-            }*/
-            if(_Mem.State==3){ 
-                _Mem.ParentMem.raddValue((int) _Stack.Pop(), (string)_Stack.Pop());
-            }else
+                _Mem.ParentMem.raddValue((int)_Stack.Pop(), (string)_Stack.Pop());
+            }
+            else
             {
-                _Mem.raddValue((int) _Stack.Pop(), (string)_Stack.Pop());
+                _Mem.raddValue((int)_Stack.Pop(), (string)_Stack.Pop());
             }
 
             Smemory.dumpMemory();
         }
 
-        public void gofalse( string label)
+
+
+
+
+
+
+        /// <summary>
+        /// This function will copy the Lvalues 
+        /// </summary>
+        /// <param name="local"></param>
+        public void CopyLValue(bool local = false)
         {
-            PFM.Go(label, (int)_Stack.Pop(),true);
+            if (_Mem.State == 3)
+            {
+                _Mem.ParentMem.raddValue((int)_Stack.Pop(), (string)_Stack.Pop());
+            }
+            else
+            {
+                _Mem.raddValue((int)_Stack.Pop(), (string)_Stack.Pop());
+            }
+
+            Smemory.dumpMemory();
         }
-        public void goTrue( string label)
+
+
+
+        /// <summary>
+        /// goes to label if top od stack is false
+        /// </summary>
+        /// <param name="label"></param>
+        public void gofalse(string label)
         {
-            PFM.Go(label, (int)_Stack.Pop(),true);
+            PFM.Go(label, (int)_Stack.Pop(), true);
+        }
+        /// <summary>
+        /// goes to label if top of stack is true
+        /// </summary>
+        /// <param name="label"></param>
+        public void goTrue(string label)
+        {
+            PFM.Go(label, (int)_Stack.Pop(), true);
         }
 
         public void add()
@@ -132,7 +164,7 @@ Pushes a copy of the top value on stack
 
         public void subtract()
         {
-            _Stack.Push( -(int)_Stack.Pop() + (int)_Stack.Pop()   );
+            _Stack.Push(-(int)_Stack.Pop() + (int)_Stack.Pop());
 
 
         }
@@ -143,23 +175,23 @@ Pushes a copy of the top value on stack
         }
         public void divide()
         {
-            int one =(int)_Stack.Pop();
-            int two =(int)_Stack.Pop();
-            _Stack.Push((int)( two / one ) );
+            int one = (int)_Stack.Pop();
+            int two = (int)_Stack.Pop();
+            _Stack.Push((int)(two / one));
         }
 
         public void modulus()
         {
-            int one =(int)_Stack.Pop();
-            int two =(int)_Stack.Pop();
-            _Stack.Push((int)( two % one ) );
+            int one = (int)_Stack.Pop();
+            int two = (int)_Stack.Pop();
+            _Stack.Push((int)(two % one));
 
         }
         public void OpAnd()
         {
-            int one =(int)_Stack.Pop();
-            int two =(int)_Stack.Pop();
-            if( one !=0 && two!=0)
+            int one = (int)_Stack.Pop();
+            int two = (int)_Stack.Pop();
+            if (one != 0 && two != 0)
             {
                 _Stack.Push(1);
                 return;
@@ -169,9 +201,9 @@ Pushes a copy of the top value on stack
 
         public void OpOr()
         {
-            int one =(int)_Stack.Pop();
-            int two =(int)_Stack.Pop();
-            if( one !=0 || two!=0)
+            int one = (int)_Stack.Pop();
+            int two = (int)_Stack.Pop();
+            if (one != 0 || two != 0)
             {
                 _Stack.Push(1);
                 return;
@@ -180,8 +212,8 @@ Pushes a copy of the top value on stack
         }
         public void OpNot()
         {
-            int one =(int)_Stack.Pop();
-            if(one!=0)
+            int one = (int)_Stack.Pop();
+            if (one != 0)
             {
                 _Stack.Push(0);
                 return;
@@ -193,33 +225,40 @@ Pushes a copy of the top value on stack
         /*Relational operators*/
         public void notEQ()
         {
-            if( Popi()!= Popi())
+            if (Popi() != Popi())
             {
                 _Stack.Push(1);
-                
-            }else
-            { 
+
+            }
+            else
+            {
                 _Stack.Push(0);
             }
         }
         public void lessEQ()
         {
-            if( Popi()> Popi())
+            if (Popi() > Popi())
             {
                 _Stack.Push(1);
-            }else{ 
-            _Stack.Push(0);
-        }}
+            }
+            else
+            {
+                _Stack.Push(0);
+            }
+        }
 
         public void grEQ()
         {
             {
-            if( Popi()< Popi())
-            {
-                _Stack.Push(1);
-            }else{ 
-            _Stack.Push(0);
-        }}
+                if (Popi() < Popi())
+                {
+                    _Stack.Push(1);
+                }
+                else
+                {
+                    _Stack.Push(0);
+                }
+            }
 
 
         }
@@ -227,10 +266,11 @@ Pushes a copy of the top value on stack
 
         public void less()
         {
-            if( Popi()> Popi())
+            if (Popi() > Popi())
             {
                 _Stack.Push(1);
-            }else
+            }
+            else
             {
                 _Stack.Push(0);
             }
@@ -238,8 +278,8 @@ Pushes a copy of the top value on stack
 
         public int grEq()
         {
-            int retval =0;
-            if( Popi()>= Popi())
+            int retval = 0;
+            if (Popi() >= Popi())
             {
                 retval = 1;
             }
@@ -249,8 +289,8 @@ Pushes a copy of the top value on stack
 
         public int gr()
         {
-            int retval =0;
-            if( !(Popi()>= Popi()))
+            int retval = 0;
+            if (!(Popi() >= Popi()))
             {
                 retval = 1;
             }
@@ -259,7 +299,7 @@ Pushes a copy of the top value on stack
         }
         public void notEq()
         {
-            if( Popi()!= Popi())
+            if (Popi() != Popi())
             {
                 _Stack.Push(1);
             }
@@ -267,25 +307,45 @@ Pushes a copy of the top value on stack
         }
         public void EQ()
         {
-            if( Popi()== Popi())
+            if (Popi() == Popi())
             {
                 _Stack.Push(1);
             }
             _Stack.Push(0);
         }
-        public void print(bool isSubProg=false)
+        public void print(bool isSubProg = false)
         {
             Console.WriteLine("{0}", _Stack.Peek());
 
 
         }
 
-
+        /// <summary>
+        /// pops value from stack and returns it as interger
+        /// </summary>
+        /// <returns></returns>
         private int Popi()
         {
-            var rv =_Stack.Pop();
+            var rv = _Stack.Pop();
             return (int)rv;
         }
+
+        /**Project two additions */
+
+
+
+        /// <summary>
+        /// pops top two items off of stack and copys using pointers
+        /// the result will have both lvalues pointing to the same memory location
+        /// </summary>
+        public void copyMainMem()
+        {
+            MainMemory.mMem.copy( _Stack.Pop().ToString() ,_Stack.Pop().ToString());
+        }
+
+
+
+
 
     }
 

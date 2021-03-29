@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ProjectOne</name>
+    </assembly>
+    <members>
+        <member name="M:ProjectOne.MainMemory.#ctor">
+            <summary>
+            Private constructor set Memory here
+            </summary>
+        </member>
+        <member name="M:ProjectOne.MainMemory.addItem(System.String,System.String)">
+            <summary>
+            THis handles adding arras and single values int the data section
+            this will handle .int d1, …, dn
+            will work for updates also
+            </summary>
+            <param name="lvalue">the lvalue</param>
+            <param name="items">the Items</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:ProjectOne.MainMemory.copy(System.String,System.String)" -->
+        <member name="T:ProjectOne.Processor">
+            <summary>
+            This class manages loading the file and the actual "Program"
+            </summary>
+        </member>
+        <member name="F:ProjectOne.Processor.pg">
+            <summary>
+            the program to run
+            </summary>
+        </member>
+        <member name="F:ProjectOne.Processor._stack">
+            <summary>
+            the stack fot this process
+            </summary>
+        </member>
+        <member name="F:ProjectOne.Processor._filename">
+            <summary>
+            file to process
+            </summary>
+        </member>
+        <member name="F:ProjectOne.Processor._pMode">
+            <summary>
+            the current mode the processor is in
+            </summary>
+        </member>
+        <member name="M:ProjectOne.Processor.Process">
+            <summary>
+            This is the main processor
+            processing starts here
+            </summary>
+        </member>
+        <member name="T:ProjectOne.ProcMode">
+            <summary>
+            Enum for processor modes.Processor can either be in data or instruction mode
+            op0
+            </summary>
+        </member>
+        <member name="F:ProjectOne.ProcMode.data">
+            items stored in data segment
+        </member>
+        <member name="F:ProjectOne.ProcMode.text">
+            Items stored in user text section
+        </member>
+        <member name="F:ProjectOne.ProcMode.Project1_Legacy">
+            This is to keep compatibility with project 1
+        </member>
+        <member name="T:ProjectOne.ProgFileMan">
+            <summary>
+            This class manages loading the file and the actual "Program"
+            </summary>
+        </member>
+        <member name="M:ProjectOne.ProgFileMan.LoadProg">
+            <summary>
+            this loads the program stores it in program
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:ProjectOne.ProgFileMan.NextCommand">
+            <summary>
+            gets the next command Processor will call thsi
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:ProjectOne.ProgFileMan.call(System.String)">
+            <summary>
+            handles call to subroutine
+            </summary>
+            <param name="label"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ProjectOne.ProgFileMan.returnFromCall">
+            <summary>
+            handles returning from subroutine
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ProjectOne.Settings">
+            <summary>
+            This class manages Settings
+            Change all configurable items here
+            
+            </summary>
+        </member>
+        <member name="F:ProjectOne.Settings.MAXPROC">
+            <summary>
+            Maximum allowed processors
+            </summary>
+        </member>
+        <member name="F:ProjectOne.Settings.MEMSIZE">
+            <summary>
+            the size of the memory
+            </summary>
+        </member>
+        <member name="F:ProjectOne.Settings.DEBUGGING">
+            <summary>
+            a constant to indicate debugging
+            </summary>
+        </member>
+        <member name="F:ProjectOne.Settings.dmpMem">
+            <summary>
+            a constant to indicate whether to use memdmp when debugging
+            </summary>
+        </member>
+        <member name="M:ProjectOne.Smemory.isMainMem">
+            <summary>
+            check if this instance is the main memory
+            </summary>
+            <returns>true if main, false if subroutine</returns>
+        </member>
+        <member name="M:ProjectOne.Smemory.dumpMemory">
+            <summary>
+            Debugging tool to show the contents of the memory
+            </summary>
+        </member>
+        <member name="M:ProjectOne.Smemory.getValue(System.String)">
+            <summary>
+            puts value into memory
+            </summary>
+            <param name="addr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ProjectOne.Smemory.raddValue(System.Int32,System.String)">
+            <summary>
+            gets value from memory
+            </summary>
+            <param name="r"></param>
+            <param name="l"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ProjectOne.SStack">
+            <summary>
+            this is the stack object.
+            Handles the stack functions
+            Maintains a stack
+            </summary>
+        </member>
+        <member name="M:ProjectOne.SStack.#ctor(ProjectOne.ProgFileMan,ProjectOne.Smemory,System.String)">
+            <summary>
+            This is the stack  
+            </summary>
+        </member>
+        <member name="M:ProjectOne.SStack.push(System.Object)">
+            <summary>
+            Pushes c onto the stack
+            </summary>
+            <param name="c"></param>
+        </member>
+        <member name="M:ProjectOne.SStack.pop">
+            <summary>
+             pops item off stack does not use item 
+            </summary>
+        </member>
+        <member name="M:ProjectOne.SStack.lvalue(System.String)">
+            <summary>
+            Pushes L Value onto Stack
+            </summary>
+            <param name="l"></param>
+        </member>
+        <member name="M:ProjectOne.SStack.SetMemFromStack(System.Boolean)">
+            <summary>
+            sets memory from stack
+            </summary>
+            <param name="local"></param>
+        </member>
+        <member name="M:ProjectOne.SStack.CopyLValue(System.Boolean)">
+            <summary>
+            This function will copy the Lvalues 
+            </summary>
+            <param name="local"></param>
+        </member>
+        <member name="M:ProjectOne.SStack.gofalse(System.String)">
+            <summary>
+            goes to label if top od stack is false
+            </summary>
+            <param name="label"></param>
+        </member>
+        <member name="M:ProjectOne.SStack.goTrue(System.String)">
+            <summary>
+            goes to label if top of stack is true
+            </summary>
+            <param name="label"></param>
+        </member>
+        <member name="M:ProjectOne.SStack.Popi">
+            <summary>
+            pops value from stack and returns it as interger
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ProjectOne.SStack.copyMainMem">
+            Project two additions 
+            <summary>
+            pops top two items off of stack and copys using pointers
+            the result will have both lvalues pointing to the same memory location
+            </summary>
+        </member>
+    </members>
+</doc>
