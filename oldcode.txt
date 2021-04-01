@@ -1,0 +1,18 @@
+/**
+    Some Ideas that didn't work  
+            /*
+         private static Smemory _lmem;
+        public static Smemory LMEM
+        {
+            get
+            {
+                if(_lmem==null)
+                {
+                    _lmem = new Smemory(1000);
+
+                }
+                return _lmem;
+            }
+        }
+        private int loc =0;
+*/
