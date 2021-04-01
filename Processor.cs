@@ -19,8 +19,16 @@ namespace ProjectOne
         /// file to process
         /// </summary>
         private string _filename;    
-        public Processor(string FileName)
+/// <summary>
+/// Processor ID
+/// </summary>
+        private int _procID;
+        public int PROCID{
+            get{return _procID;}
+        }
+        public Processor(string FileName, int procID)
         {
+            _procID = procID;
             _filename =FileName;
             _pMode = ProcMode.Project1_Legacy;  // start out as legacy until something changes this
         }
@@ -52,8 +60,8 @@ namespace ProjectOne
             var curcmd =parser.parse(nxtStr);
             while (curcmd.amcommand.CompareTo("halt")!=0)  // end of halt
             {
-                if(Settings.DEBUGGING){ 
-                    Console.WriteLine("FullCmd -- " +nxtStr);
+                if(Settings.DEBUGGING){
+                    Console.WriteLine("PROC {0}: FULLCMD = {1}",_procID,nxtStr);
                 }
                 // process cmds
                 if( curcmd.amcommand.CompareTo("push")==0)
@@ -106,7 +114,7 @@ namespace ProjectOne
                 }
                 else if ( curcmd.amcommand.CompareTo("show")==0)
                 {
-                    Console.WriteLine(curcmd.svalue);
+                    Console.WriteLine("PROC {0}:{1}",_procID,nxtStr,curcmd.svalue);
                 }
                 else if ( curcmd.amcommand.CompareTo("print")==0)
                 {
@@ -182,11 +190,10 @@ namespace ProjectOne
                 {   
                     if( _pMode==ProcMode.data)
                     {
-                        // add lvaue to data segment
+                        MainMemory.mMem.addItem(curcmd.svalue, curcmd.arrStr);
                     }
-
                 }
-                else if( curcmd.amcommand.CompareTo("&=")==0)
+                else if( curcmd.amcommand.CompareTo(":&")==0)
                 {
                     _stack.SetMemFromStack( inBegin);//  .push(curcmd.pushVal);
                 }

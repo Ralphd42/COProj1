@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-
-/// <summary>
-/// This class will maintain memory
-/// </summary>
 namespace ProjectOne
 {
     class Smemory
@@ -61,16 +57,16 @@ namespace ProjectOne
 /// <summary>
 /// Debugging tool to show the contents of the memory
 /// </summary>
-        public static void dumpMemory()
+        public static void dumpMemory(int procID=1 )
         {
             if(Settings.DEBUGGING)
-            { 
-                Console.WriteLine("Begin Memory Dump");
+            {
+                Console.WriteLine("PROC {0}:Begin Local Memory Dump",procID);
                 foreach(var item in MEM._memory)
                 {
-                    Console.WriteLine("{0} - {1}", item.Key, item.Value);
+                    Console.WriteLine("PROC {0}:{1} - {2}",procID, item.Key, item.Value);
                 }
-                Console.WriteLine("End Memory Dump");
+                Console.WriteLine("PROC {0}:END Local Memory Dump",procID);
             }
         }
 
@@ -116,24 +112,7 @@ namespace ProjectOne
     }
 }
 
-/**
-    Some Ideas that didn't work  
-            /*
-         private static Smemory _lmem;
-        public static Smemory LMEM
-        {
-            get
-            {
-                if(_lmem==null)
-                {
-                    _lmem = new Smemory(1000);
 
-                }
-                return _lmem;
-            }
-        }
-        private int loc =0;
-*/
         
         
 

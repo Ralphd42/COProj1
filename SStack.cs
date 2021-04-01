@@ -23,6 +23,19 @@ namespace ProjectOne
                 _Mem = value;
             }
         }
+        private int _ProcID;
+        public int Procid
+        {
+            get
+            {
+                return _ProcID;
+            }
+            set
+            {
+                _ProcID = value;
+            }
+        }
+
         /// <summary>
         /// This is the stack  
         /// </summary>
@@ -157,8 +170,18 @@ namespace ProjectOne
 
         public void add()
         {
-            _Stack.Push((int)_Stack.Pop() + (int)_Stack.Pop());
-
+            int top = Popi();
+            if( isnextLvalue())// address add 
+            {
+                string lvalue = _Stack.Pop().ToString();
+                var addr =MainMemory.mMem.LValAddr(lvalue);
+                addr.Y += top;
+                _Stack.Push(addr);
+            }
+            else  //regular add
+            {
+                _Stack.Push((int)_Stack.Pop() + (int)_Stack.Pop());
+            }
 
         }
 
@@ -315,9 +338,7 @@ namespace ProjectOne
         }
         public void print(bool isSubProg = false)
         {
-            Console.WriteLine("{0}", _Stack.Peek());
-
-
+            Console.WriteLine("PROC {0}:{1}",_ProcID,_Stack.Peek());
         }
 
         /// <summary>
@@ -342,7 +363,21 @@ namespace ProjectOne
         {
             MainMemory.mMem.copy( _Stack.Pop().ToString() ,_Stack.Pop().ToString());
         }
-
+        /// <summary>
+        /// tests if top of stack is an lvalue
+        /// </summary>
+        /// <returns>true if lvalue</returns>
+        public bool isnextLvalue()
+        {
+            bool retval = false;
+            object peeko = _Stack.Peek();
+            int oval;
+            if(!int.TryParse(peeko.ToString(),out oval))
+            {
+                retval = true;
+            }
+            return retval;
+        }    
 
 
 
